@@ -1,6 +1,23 @@
 {
   "name": "timberlogs-cli",
   "version": "0.1.0",
+  "description": "Official Timberlogs CLI — query logs, inspect flows, view stats from your terminal",
+  "keywords": [
+    "timberlogs",
+    "logging",
+    "cli",
+    "structured-logging",
+    "observability"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/enaboapps/timberlogs-cli.git"
+  },
+  "homepage": "https://timberlogs.dev",
+  "bugs": {
+    "url": "https://github.com/enaboapps/timberlogs-cli/issues"
+  },
   "type": "module",
   "bin": {
     "timberlogs": "./dist/cli.js"

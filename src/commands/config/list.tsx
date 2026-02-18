@@ -1,7 +1,8 @@
 import {Text, Box} from 'ink';
 import {useEffect} from 'react';
 import {z} from 'zod';
-import {readConfig, maskApiKey} from '../../lib/config.js';
+import {readConfig} from '../../lib/config.js';
+import {maskApiKey} from '../../lib/auth.js';
 import {DEFAULT_API_URL} from '../../types/config.js';
 
 export const options = z.object({

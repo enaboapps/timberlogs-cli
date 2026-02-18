@@ -34,10 +34,3 @@ export function deleteConfig(): void {
 	}
 }
 
-export function maskApiKey(key: string): string {
-	if (key.length < 16) {
-		return '****';
-	}
-
-	return key.slice(0, 8) + '****...' + key.slice(-4);
-}

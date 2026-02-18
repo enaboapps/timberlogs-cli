@@ -1,7 +1,8 @@
 import {Text} from 'ink';
 import {useState, useEffect} from 'react';
 import {z} from 'zod';
-import {readConfig, writeConfig, maskApiKey} from '../../lib/config.js';
+import {readConfig, writeConfig} from '../../lib/config.js';
+import {maskApiKey} from '../../lib/auth.js';
 import type {Config} from '../../types/config.js';
 
 const VALID_KEYS: Record<string, keyof Config> = {

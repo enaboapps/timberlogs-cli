@@ -25,7 +25,7 @@ export function parseRelativeTime(input: string): number {
 	}
 
 	const numeric = Number(input);
-	if (!Number.isNaN(numeric)) {
+	if (!Number.isNaN(numeric) && numeric > 1e12) {
 		return numeric;
 	}
 

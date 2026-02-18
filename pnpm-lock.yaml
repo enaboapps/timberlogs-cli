@@ -20,6 +20,9 @@ importers:
       react:
         specifier: ^18.3.1
         version: 18.3.1
+      zod:
+        specifier: ^3.25.76
+        version: 3.25.76
     devDependencies:
       '@sindresorhus/tsconfig':
         specifier: ^7.0.0

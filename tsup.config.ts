@@ -10,12 +10,17 @@ export default defineConfig([
 		clean: true,
 	},
 	{
-		entry: {
-			'commands/index': 'src/commands/index.tsx',
-		},
+		entry: [
+			'src/commands/**/*.tsx',
+			'src/commands/**/*.ts',
+			'src/lib/**/*.ts',
+			'src/types/**/*.ts',
+			'src/components/**/*.tsx',
+		],
 		format: 'esm',
 		target: 'node20',
 		outDir: 'dist',
+		bundle: false,
 		clean: false,
 	},
 ]);

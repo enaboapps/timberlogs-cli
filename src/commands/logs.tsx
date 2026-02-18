@@ -87,6 +87,10 @@ export default function Logs({options: flags}: Props) {
 		}
 	}
 
+	if (json) {
+		return null;
+	}
+
 	if (error) {
 		return <Text color="red">✗ {error}</Text>;
 	}

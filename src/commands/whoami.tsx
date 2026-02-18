@@ -71,6 +71,10 @@ export default function WhoAmI({options}: Props) {
 		setResult(info);
 	}
 
+	if (options.json) {
+		return null;
+	}
+
 	if (!result) {
 		return <Text color="yellow">Checking authentication...</Text>;
 	}

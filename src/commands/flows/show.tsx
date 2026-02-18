@@ -74,6 +74,10 @@ export default function FlowsShow({args: [flowId], options: flags}: Props) {
 		}
 	}
 
+	if (json) {
+		return null;
+	}
+
 	if (error) {
 		return <Text color="red">✗ {error}</Text>;
 	}

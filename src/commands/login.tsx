@@ -67,6 +67,10 @@ export default function Login({options}: Props) {
 		}
 	}
 
+	if (options.json) {
+		return null;
+	}
+
 	if (apiKeyFromFlag && status === 'input') {
 		return null;
 	}

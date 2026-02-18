@@ -3,6 +3,7 @@ import {useState, useEffect} from 'react';
 import {z} from 'zod';
 import {readConfig, writeConfig} from '../../lib/config.js';
 import {maskApiKey} from '../../lib/auth.js';
+import {handleError, CliError, ErrorCode} from '../../lib/errors.js';
 import type {Config} from '../../types/config.js';
 
 const VALID_KEYS: Record<string, keyof Config> = {
@@ -26,10 +27,9 @@ export default function ConfigSet({args: [key, value], options}: Props) {
 
 	useEffect(() => {
 		if (!configKey) {
-			const msg = `Invalid key: ${key}. Valid keys: ${Object.keys(VALID_KEYS).join(', ')}`;
+			const err = new CliError(ErrorCode.INVALID_INPUT, `Invalid key: ${key}. Valid keys: ${Object.keys(VALID_KEYS).join(', ')}`);
 			if (options.json) {
-				console.log(JSON.stringify({error: true, code: 'INVALID_INPUT', message: msg}));
-				process.exit(1);
+				handleError(err, true);
 			}
 
 			setResult({success: false});

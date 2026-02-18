@@ -28,8 +28,13 @@ export function createApiClient(options: {
 				method,
 				headers,
 				body: body !== undefined ? JSON.stringify(body) : undefined,
+				signal: AbortSignal.timeout(30_000),
 			});
 		} catch (error) {
+			if (error instanceof DOMException && error.name === 'TimeoutError') {
+				throw new CliError(ErrorCode.NETWORK_ERROR, 'Request timed out after 30s');
+			}
+
 			if (error instanceof TypeError) {
 				throw new CliError(ErrorCode.NETWORK_ERROR, `Network error: ${error.message}`);
 			}

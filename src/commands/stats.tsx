@@ -6,6 +6,7 @@ import {createApiClient} from '../lib/api.js';
 import {resolveApiUrl, parseRelativeTime} from '../lib/time.js';
 import {handleError} from '../lib/errors.js';
 import {isJsonMode, jsonOutput} from '../lib/output.js';
+import {StatsResponseSchema, StatsSummaryResponseSchema} from '../types/log.js';
 import StatsView from '../components/StatsView.js';
 
 export const options = z.object({
@@ -58,15 +59,17 @@ export default function Stats({options: flags}: Props) {
 			const toDate = toDateString(toMs);
 
 			const [statsResponse, summaryResponse] = await Promise.all([
-				client.get<{stats: unknown[]; totals?: Record<string, number>}>('/v1/stats', {
+				client.get('/v1/stats', {
 					from: fromDate,
 					to: toDate,
 					groupBy: flags['group-by'],
 					source: flags.source,
 					environment: flags.env,
 					dataset: flags.dataset,
-				}),
-				client.get<{today?: number; yesterday?: number; totals?: Record<string, number>}>('/v1/stats/summary').catch(() => null),
+				}).then(raw => StatsResponseSchema.parse(raw)),
+				client.get('/v1/stats/summary')
+					.then(raw => StatsSummaryResponseSchema.parse(raw))
+					.catch(() => null),
 			]);
 
 			const totals = {

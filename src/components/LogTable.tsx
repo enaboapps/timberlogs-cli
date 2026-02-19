@@ -14,7 +14,7 @@ export default function LogTable({logs, pagination, filterSummary}: Props) {
 	const [cursor, setCursor] = useState(0);
 	const [expanded, setExpanded] = useState<number | null>(null);
 
-	const maxRows = Math.min(logs.length, (process.stdout.rows || 24) - 5);
+	const maxRows = Math.max(1, Math.min(logs.length, (process.stdout.rows || 24) - 5));
 	const cols = process.stdout.columns || 80;
 
 	useInput((input, key) => {

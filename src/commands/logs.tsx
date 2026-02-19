@@ -55,7 +55,7 @@ export default function Logs({options: flags}: Props) {
 				from,
 				to,
 				limit: flags.limit,
-				offset: flags.offset || undefined,
+				offset: flags.offset > 0 ? flags.offset : undefined,
 				userId: flags['user-id'],
 				sessionId: flags['session-id'],
 				flowId: flags['flow-id'],

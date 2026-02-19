@@ -9,7 +9,7 @@ import {isJsonMode, jsonOutput} from '../../lib/output.js';
 
 const FlowSummarySchema = z.object({
 	flowId: z.string(),
-	source: z.string(),
+	source: z.string().nullish(),
 	logCount: z.number(),
 	firstSeen: z.number(),
 	lastSeen: z.number(),
@@ -18,7 +18,7 @@ const FlowSummarySchema = z.object({
 const FlowsResponseSchema = z.object({
 	flows: z.array(FlowSummarySchema),
 	pagination: z.object({
-		total: z.number(),
+		total: z.number().optional(),
 		offset: z.number(),
 		limit: z.number(),
 		hasMore: z.boolean(),
@@ -124,7 +124,7 @@ export default function FlowsList({options: flags}: Props) {
 	return (
 		<Box flexDirection="column">
 			<Text bold>
-				Flows ({data.pagination.total} total)
+				Flows{data.pagination.total != null ? ` (${data.pagination.total} total)` : ''}
 			</Text>
 			<Text dimColor>
 				{'NAME'.padEnd(nameW)}{'LOGS'.padEnd(logsW)}{'SOURCE'.padEnd(sourceW)}{'LAST SEEN'.padEnd(timeW)}

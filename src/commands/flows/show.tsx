@@ -6,7 +6,7 @@ import {createApiClient} from '../../lib/api.js';
 import {resolveApiUrl} from '../../lib/time.js';
 import {handleError} from '../../lib/errors.js';
 import {isJsonMode, jsonOutput} from '../../lib/output.js';
-import type {LogsResponse} from '../../types/log.js';
+import {LogsResponseSchema, type LogsResponse} from '../../types/log.js';
 import FlowTimeline from '../../components/FlowTimeline.js';
 
 export const args = z.tuple([z.string().describe('flowId')]);
@@ -46,10 +46,11 @@ export default function FlowsShow({args: [flowId], options: flags}: Props) {
 			const baseUrl = resolveApiUrl({apiUrl: flags['api-url']});
 			const client = createApiClient({apiKey, baseUrl, verbose: flags.verbose});
 
-			const response = await client.get<LogsResponse>('/v1/logs', {
+			const raw = await client.get('/v1/logs', {
 				flowId,
 				limit: 1000,
 			});
+			const response = LogsResponseSchema.parse(raw);
 
 			const logs = response.logs;
 			const stepCount = logs.length;

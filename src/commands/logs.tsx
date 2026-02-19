@@ -6,7 +6,7 @@ import {createApiClient} from '../lib/api.js';
 import {resolveApiUrl, parseRelativeTime} from '../lib/time.js';
 import {handleError} from '../lib/errors.js';
 import {isJsonMode, jsonOutput} from '../lib/output.js';
-import type {LogsResponse} from '../types/log.js';
+import {LogsResponseSchema, type LogsResponse} from '../types/log.js';
 import LogTable from '../components/LogTable.js';
 
 export const options = z.object({
@@ -64,16 +64,18 @@ export default function Logs({options: flags}: Props) {
 				dataset: flags.dataset,
 			};
 
-			let response: LogsResponse;
+			let raw: unknown;
 
 			if (flags.search) {
-				response = await client.get<LogsResponse>('/v1/logs/search', {
+				raw = await client.get('/v1/logs/search', {
 					q: flags.search,
 					...params,
 				});
 			} else {
-				response = await client.get<LogsResponse>('/v1/logs', params);
+				raw = await client.get('/v1/logs', params);
 			}
+
+			const response = LogsResponseSchema.parse(raw);
 
 			if (json) {
 				jsonOutput(response);

@@ -1,6 +1,5 @@
 import {Text, Box} from 'ink';
 import type {LogEntry} from '../types/log.js';
-import {LEVEL_COLORS} from '../lib/format.js';
 
 type Props = {
 	log: LogEntry;

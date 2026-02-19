@@ -32,6 +32,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
+    "lint": "eslint src/",
     "test": "vitest run",
     "prepublishOnly": "pnpm build"
   },
@@ -43,10 +44,14 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@sindresorhus/tsconfig": "^7.0.0",
     "@types/react": "^18.3.18",
+    "eslint": "^10.0.0",
+    "eslint-plugin-react-hooks": "5.2.0",
     "tsup": "^8.4.0",
     "typescript": "^5.7.3",
+    "typescript-eslint": "^8.56.0",
     "vitest": "^4.0.18"
   }
 }

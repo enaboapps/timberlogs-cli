@@ -3,9 +3,8 @@ import TextInput from 'ink-text-input';
 import {useState, useEffect} from 'react';
 import {z} from 'zod';
 import {readConfig, writeConfig} from '../lib/config.js';
-import {maskApiKey} from '../lib/auth.js';
+import {maskApiKey, resolveApiUrl} from '../lib/auth.js';
 import {createApiClient} from '../lib/api.js';
-import {resolveApiUrl} from '../lib/time.js';
 import {handleError} from '../lib/errors.js';
 
 export const options = z.object({

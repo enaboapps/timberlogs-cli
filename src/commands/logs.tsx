@@ -1,9 +1,9 @@
 import {Text} from 'ink';
 import {useState, useEffect} from 'react';
 import {z} from 'zod';
-import {requireApiKey} from '../lib/auth.js';
+import {requireApiKey, resolveApiUrl} from '../lib/auth.js';
 import {createApiClient} from '../lib/api.js';
-import {resolveApiUrl, parseRelativeTime} from '../lib/time.js';
+import {parseRelativeTime} from '../lib/time.js';
 import {handleError} from '../lib/errors.js';
 import {isJsonMode, jsonOutput} from '../lib/output.js';
 import {LogsResponseSchema, type LogsResponse} from '../types/log.js';

@@ -1,5 +1,6 @@
 import {Text, Box, useInput} from 'ink';
 import type {LogEntry} from '../types/log.js';
+import {LEVEL_COLORS, formatTime} from '../lib/format.js';
 
 type Props = {
 	flowId: string;
@@ -8,22 +9,6 @@ type Props = {
 	durationMs: number;
 	hasErrors: boolean;
 };
-
-const LEVEL_COLORS: Record<string, string> = {
-	debug: 'gray',
-	info: 'blue',
-	warn: 'yellow',
-	error: 'red',
-};
-
-function formatTime(timestamp: string): string {
-	const d = new Date(timestamp);
-	const h = String(d.getHours()).padStart(2, '0');
-	const m = String(d.getMinutes()).padStart(2, '0');
-	const s = String(d.getSeconds()).padStart(2, '0');
-	const ms = String(d.getMilliseconds()).padStart(3, '0');
-	return `${h}:${m}:${s}.${ms}`;
-}
 
 function formatDuration(ms: number): string {
 	if (ms < 1000) return `${ms}ms`;

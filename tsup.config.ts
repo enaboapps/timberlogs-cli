@@ -1,4 +1,8 @@
 import {defineConfig} from 'tsup';
+import {createRequire} from 'node:module';
+
+const require = createRequire(import.meta.url);
+const {version} = require('./package.json') as {version: string};
 
 export default defineConfig([
 	{
@@ -8,6 +12,7 @@ export default defineConfig([
 		banner: {js: '#!/usr/bin/env node'},
 		outDir: 'dist',
 		clean: true,
+		define: {'CLI_VERSION': JSON.stringify(version)},
 	},
 	{
 		entry: [
@@ -24,5 +29,6 @@ export default defineConfig([
 		outDir: 'dist',
 		bundle: false,
 		clean: false,
+		define: {'CLI_VERSION': JSON.stringify(version)},
 	},
 ]);

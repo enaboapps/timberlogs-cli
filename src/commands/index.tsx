@@ -3,7 +3,7 @@ import {Text, Box} from 'ink';
 export default function Index() {
 	return (
 		<Box flexDirection="column">
-			<Text bold>Timberlogs CLI v0.1.0</Text>
+			<Text bold>Timberlogs CLI v{CLI_VERSION}</Text>
 			<Text> </Text>
 			<Text>Usage: timberlogs {'<command>'} [options]</Text>
 			<Text> </Text>

@@ -1,15 +1,9 @@
 import {Text, Box} from 'ink';
 import type {LogEntry} from '../types/log.js';
+import {LEVEL_COLORS} from '../lib/format.js';
 
 type Props = {
 	log: LogEntry;
-};
-
-const LEVEL_COLORS: Record<string, string> = {
-	debug: 'gray',
-	info: 'blue',
-	warn: 'yellow',
-	error: 'red',
 };
 
 function Field({label, value}: {label: string; value: string | undefined}) {

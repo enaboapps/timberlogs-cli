@@ -1,4 +1,5 @@
 import {Text, Box, useInput} from 'ink';
+import {LEVEL_COLORS} from '../lib/format.js';
 
 type LevelStats = {
 	debug: number;
@@ -24,13 +25,6 @@ type Props = {
 		warn: number;
 		error: number;
 	}>;
-};
-
-const LEVEL_COLORS: Record<string, string> = {
-	debug: 'gray',
-	info: 'blue',
-	warn: 'yellow',
-	error: 'red',
 };
 
 function formatNumber(n: number): string {

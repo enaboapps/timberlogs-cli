@@ -9,6 +9,7 @@
     "structured-logging",
     "observability"
   ],
+  "author": "enaboapps",
   "license": "MIT",
   "repository": {
     "type": "git",

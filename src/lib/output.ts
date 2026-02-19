@@ -1,10 +1,6 @@
-export function isJsonMode(flags: {json?: boolean; interactive?: boolean}): boolean {
+export function isJsonMode(flags: {json?: boolean}): boolean {
 	if (flags.json) {
 		return true;
-	}
-
-	if (flags.interactive) {
-		return false;
 	}
 
 	return !process.stdout.isTTY;

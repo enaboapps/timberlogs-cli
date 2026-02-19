@@ -6,14 +6,6 @@ describe('isJsonMode', () => {
 		expect(isJsonMode({json: true})).toBe(true);
 	});
 
-	it('returns false when --interactive flag is set', () => {
-		expect(isJsonMode({interactive: true})).toBe(false);
-	});
-
-	it('--json takes precedence over --interactive', () => {
-		expect(isJsonMode({json: true, interactive: true})).toBe(true);
-	});
-
 	it('falls back to TTY detection', () => {
 		const originalIsTTY = process.stdout.isTTY;
 		Object.defineProperty(process.stdout, 'isTTY', {value: true, writable: true});

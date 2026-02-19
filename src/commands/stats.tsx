@@ -11,7 +11,7 @@ import StatsView from '../components/StatsView.js';
 export const options = z.object({
 	from: z.string().default('24h').describe('Start time (e.g., 24h, 7d)'),
 	to: z.string().optional().describe('End time'),
-	'group-by': z.string().default('day').describe('Group by: hour, day, source'),
+	'group-by': z.enum(['hour', 'day', 'source']).default('day').describe('Group by: hour, day, source'),
 	source: z.string().optional().describe('Filter by source'),
 	env: z.string().optional().describe('Filter by environment'),
 	dataset: z.string().optional().describe('Filter by dataset'),

@@ -8,7 +8,6 @@ import type {Config} from '../../types/config.js';
 
 const VALID_KEYS: Record<string, keyof Config> = {
 	'api-key': 'apiKey',
-	'api-url': 'apiUrl',
 };
 
 export const args = z.tuple([z.string().describe('key'), z.string().describe('value')]);

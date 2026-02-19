@@ -3,7 +3,7 @@ import TextInput from 'ink-text-input';
 import {useState, useEffect} from 'react';
 import {z} from 'zod';
 import {readConfig, writeConfig} from '../lib/config.js';
-import {maskApiKey, resolveApiUrl} from '../lib/auth.js';
+import {maskApiKey} from '../lib/auth.js';
 import {createApiClient} from '../lib/api.js';
 import {handleError} from '../lib/errors.js';
 
@@ -32,8 +32,7 @@ export default function Login({options}: Props) {
 	async function validateAndStore(key: string) {
 		setStatus('validating');
 
-		const baseUrl = resolveApiUrl({});
-		const client = createApiClient({apiKey: key, baseUrl});
+		const client = createApiClient({apiKey: key});
 
 		try {
 			await client.get('/v1/logs', {limit: 1});

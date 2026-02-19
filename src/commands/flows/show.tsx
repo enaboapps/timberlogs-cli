@@ -1,7 +1,7 @@
 import {Text} from 'ink';
 import {useState, useEffect} from 'react';
 import {z} from 'zod';
-import {requireApiKey, resolveApiUrl} from '../../lib/auth.js';
+import {requireApiKey} from '../../lib/auth.js';
 import {createApiClient} from '../../lib/api.js';
 import {handleError} from '../../lib/errors.js';
 import {isJsonMode, jsonOutput} from '../../lib/output.js';
@@ -13,7 +13,6 @@ export const args = z.tuple([z.string().describe('flowId')]);
 export const options = z.object({
 	json: z.boolean().default(false).describe('Output as JSON'),
 	'api-key': z.string().optional().describe('Override API key'),
-	'api-url': z.string().optional().describe('Override API URL'),
 	verbose: z.boolean().default(false).describe('Show debug info'),
 });
 
@@ -42,8 +41,7 @@ export default function FlowsShow({args: [flowId], options: flags}: Props) {
 	async function fetchFlow() {
 		try {
 			const apiKey = requireApiKey({apiKey: flags['api-key']});
-			const baseUrl = resolveApiUrl({apiUrl: flags['api-url']});
-			const client = createApiClient({apiKey, baseUrl, verbose: flags.verbose});
+			const client = createApiClient({apiKey, verbose: flags.verbose});
 
 			const raw = await client.get('/v1/logs', {
 				flowId,

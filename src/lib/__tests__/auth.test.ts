@@ -1,5 +1,5 @@
 import {describe, it, expect, vi, beforeEach, afterEach} from 'vitest';
-import {resolveApiKey, requireApiKey, maskApiKey, resolveApiUrl} from '../auth.js';
+import {resolveApiKey, requireApiKey, maskApiKey} from '../auth.js';
 import {CliError} from '../errors.js';
 
 vi.mock('../config.js', () => ({
@@ -60,40 +60,6 @@ describe('requireApiKey', () => {
 	it('throws CliError when no key', () => {
 		expect(() => requireApiKey({})).toThrow(CliError);
 		expect(() => requireApiKey({})).toThrow('No API key found');
-	});
-});
-
-describe('resolveApiUrl', () => {
-	const originalEnv = process.env;
-
-	beforeEach(() => {
-		process.env = {...originalEnv};
-		delete process.env['TIMBER_API_URL'];
-		mockedReadConfig.mockReturnValue({});
-	});
-
-	afterEach(() => {
-		process.env = originalEnv;
-	});
-
-	it('returns flag value first', () => {
-		process.env['TIMBER_API_URL'] = 'https://env.example.com';
-		mockedReadConfig.mockReturnValue({apiUrl: 'https://config.example.com'});
-		expect(resolveApiUrl({apiUrl: 'https://flag.example.com'})).toBe('https://flag.example.com');
-	});
-
-	it('falls back to env var', () => {
-		process.env['TIMBER_API_URL'] = 'https://env.example.com';
-		expect(resolveApiUrl({})).toBe('https://env.example.com');
-	});
-
-	it('falls back to config file', () => {
-		mockedReadConfig.mockReturnValue({apiUrl: 'https://config.example.com'});
-		expect(resolveApiUrl({})).toBe('https://config.example.com');
-	});
-
-	it('returns default URL when nothing set', () => {
-		expect(resolveApiUrl({})).toBe('https://timberlogs-ingest.enaboapps.workers.dev');
 	});
 });
 

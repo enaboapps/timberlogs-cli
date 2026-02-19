@@ -42,8 +42,8 @@ describe('config', () => {
 		});
 
 		it('reads existing config', () => {
-			writeConfig({apiKey: 'test-key', apiUrl: 'https://example.com'});
-			expect(readConfig()).toEqual({apiKey: 'test-key', apiUrl: 'https://example.com'});
+			writeConfig({apiKey: 'test-key'});
+			expect(readConfig()).toEqual({apiKey: 'test-key'});
 		});
 	});
 

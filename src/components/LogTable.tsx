@@ -85,7 +85,7 @@ export default function LogTable({logs, pagination, filterSummary}: Props) {
 			})}
 
 			<Text dimColor>
-				{pagination.offset + logs.length}/{pagination.total} logs
+				{pagination.total != null ? `${pagination.offset + logs.length}/${pagination.total} logs` : `${logs.length} logs`}
 				{pagination.hasMore ? '' : ' (end)'}
 				{'  ↑↓ navigate  Enter expand  q quit'}
 			</Text>

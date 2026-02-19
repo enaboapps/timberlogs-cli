@@ -50,6 +50,8 @@ Interactive mode: use arrow keys to navigate, Enter to expand a log, `q` to quit
 ### Flows
 
 ```bash
+timberlogs flows                        # List all flows
+timberlogs flows --from 7d              # Flows from last 7 days
 timberlogs flows show <flow-id>         # View flow timeline
 timberlogs flows show checkout-abc      # Example
 ```
@@ -75,7 +77,6 @@ timberlogs stats --group-by source      # Group by source
 
 ```bash
 timberlogs config set api-key <key>     # Set API key
-timberlogs config set api-url <url>     # Set API endpoint
 timberlogs config list                   # Show current config
 timberlogs config reset                  # Delete config file
 ```
@@ -86,7 +87,6 @@ timberlogs config reset                  # Delete config file
 |------|-------------|
 | `--json` | Force JSON output |
 | `--api-key <key>` | Override API key for this command |
-| `--api-url <url>` | Override API endpoint |
 | `--verbose` | Show HTTP request details |
 | `--version`, `-v` | Show version |
 | `--help`, `-h` | Show help |
@@ -111,7 +111,6 @@ timberlogs logs --search "500 error" --json --from 1h
 | Variable | Description |
 |----------|-------------|
 | `TIMBER_API_KEY` | API key (overrides config file) |
-| `TIMBER_API_URL` | API endpoint (overrides config file) |
 | `NO_COLOR` | Disable color output |
 | `TIMBERLOGS_CONFIG_DIR` | Custom config directory (default: `~/.config/timberlogs`) |
 

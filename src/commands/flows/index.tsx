@@ -82,7 +82,7 @@ export default function FlowsList({options: flags}: Props) {
 				to,
 				source: flags.source,
 				limit: flags.limit,
-				offset: flags.offset || undefined,
+				offset: flags.offset > 0 ? flags.offset : undefined,
 			});
 			const response = FlowsResponseSchema.parse(raw);
 

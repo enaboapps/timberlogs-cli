@@ -1,6 +1,4 @@
-import {readConfig} from './config.js';
 import {CliError, ErrorCode} from './errors.js';
-import {DEFAULT_API_URL} from '../types/config.js';
 
 const MULTIPLIERS: Record<string, number> = {
 	m: 60 * 1000,
@@ -33,22 +31,4 @@ export function parseRelativeTime(input: string): number {
 		ErrorCode.INVALID_INPUT,
 		`Invalid time format: ${input}. Use 30m, 1h, 24h, 7d, or ISO 8601.`,
 	);
-}
-
-export function resolveApiUrl(flags: {apiUrl?: string}): string {
-	if (flags.apiUrl) {
-		return flags.apiUrl;
-	}
-
-	const envUrl = process.env['TIMBER_API_URL'];
-	if (envUrl) {
-		return envUrl;
-	}
-
-	const config = readConfig();
-	if (config.apiUrl) {
-		return config.apiUrl;
-	}
-
-	return DEFAULT_API_URL;
 }

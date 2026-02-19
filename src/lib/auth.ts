@@ -1,5 +1,6 @@
 import {readConfig} from './config.js';
 import {CliError, ErrorCode} from './errors.js';
+import {DEFAULT_API_URL} from '../types/config.js';
 
 export function resolveApiKey(flags: {apiKey?: string}): string | null {
 	if (flags.apiKey) {
@@ -29,6 +30,24 @@ export function requireApiKey(flags: {apiKey?: string}): string {
 	}
 
 	return key;
+}
+
+export function resolveApiUrl(flags: {apiUrl?: string}): string {
+	if (flags.apiUrl) {
+		return flags.apiUrl;
+	}
+
+	const envUrl = process.env['TIMBER_API_URL'];
+	if (envUrl) {
+		return envUrl;
+	}
+
+	const config = readConfig();
+	if (config.apiUrl) {
+		return config.apiUrl;
+	}
+
+	return DEFAULT_API_URL;
 }
 
 export function maskApiKey(key: string): string {

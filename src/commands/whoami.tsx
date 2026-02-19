@@ -1,9 +1,8 @@
 import {Text, Box} from 'ink';
 import {useState, useEffect} from 'react';
 import {z} from 'zod';
-import {resolveApiKey, maskApiKey} from '../lib/auth.js';
+import {resolveApiKey, maskApiKey, resolveApiUrl} from '../lib/auth.js';
 import {createApiClient} from '../lib/api.js';
-import {resolveApiUrl} from '../lib/time.js';
 import {handleError, CliError, ErrorCode} from '../lib/errors.js';
 
 export const options = z.object({

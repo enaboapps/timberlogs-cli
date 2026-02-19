@@ -31,7 +31,7 @@ export default function ConfigReset({options}: Props) {
 	}, [confirmed]);
 
 	if (options.json && !confirmed) {
-		console.error(JSON.stringify({error: true, message: 'Use --force to skip confirmation'}));
+		console.log(JSON.stringify({error: true, message: 'Use --force to skip confirmation'}));
 		process.exit(1);
 		return null;
 	}

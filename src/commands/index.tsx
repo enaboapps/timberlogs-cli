@@ -12,6 +12,7 @@ export default function Index() {
 			<Text>  logout             Remove stored API key</Text>
 			<Text>  whoami             Show current auth status</Text>
 			<Text>  logs               Query and search logs</Text>
+			<Text>  flows              List all flows</Text>
 			<Text>  flows show {'<id>'}    View a flow timeline</Text>
 			<Text>  stats              Show log volume and distribution</Text>
 			<Text>  config set         Set a config value</Text>

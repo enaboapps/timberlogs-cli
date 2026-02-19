@@ -24,7 +24,7 @@ export default function LogDetail({log}: Props) {
 				<Text>{log.message}</Text>
 			</Box>
 
-			<Field label="Timestamp" value={log.timestamp} />
+			<Field label="Timestamp" value={String(log.timestamp)} />
 			<Field label="Level" value={log.level} />
 			<Field label="Source" value={log.source} />
 			<Field label="Environment" value={log.environment} />

@@ -16,6 +16,8 @@ export default defineConfig([
 			'src/lib/**/*.ts',
 			'src/types/**/*.ts',
 			'src/components/**/*.tsx',
+			'!src/**/__tests__/**',
+			'!src/**/*.test.*',
 		],
 		format: 'esm',
 		target: 'node20',

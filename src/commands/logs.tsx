@@ -10,7 +10,7 @@ import type {LogsResponse} from '../types/log.js';
 import LogTable from '../components/LogTable.js';
 
 export const options = z.object({
-	level: z.string().optional().describe('Filter by level (debug|info|warn|error)'),
+	level: z.enum(['debug', 'info', 'warn', 'error']).optional().describe('Filter by level (debug|info|warn|error)'),
 	source: z.string().optional().describe('Filter by source'),
 	env: z.string().optional().describe('Filter by environment'),
 	search: z.string().optional().describe('Full-text search query'),

@@ -33,21 +33,22 @@ export function requireApiKey(flags: {apiKey?: string}): string {
 }
 
 export function resolveApiUrl(flags: {apiUrl?: string}): string {
+	let url: string;
+
 	if (flags.apiUrl) {
-		return flags.apiUrl;
+		url = flags.apiUrl;
+	} else if (process.env['TIMBER_API_URL']) {
+		url = process.env['TIMBER_API_URL'];
+	} else {
+		const config = readConfig();
+		url = config.apiUrl ?? DEFAULT_API_URL;
 	}
 
-	const envUrl = process.env['TIMBER_API_URL'];
-	if (envUrl) {
-		return envUrl;
+	if (url.startsWith('http://') && !url.includes('localhost') && !url.includes('127.0.0.1')) {
+		console.error('⚠ Warning: API URL uses HTTP. Consider using HTTPS for secure communication.');
 	}
 
-	const config = readConfig();
-	if (config.apiUrl) {
-		return config.apiUrl;
-	}
-
-	return DEFAULT_API_URL;
+	return url;
 }
 
 export function maskApiKey(key: string): string {

@@ -56,9 +56,9 @@ export default function StatsView({totals, period, comparison, groupBySource}: P
 		: '';
 	const trendColor = comparison
 		? comparison.trend === 'up'
-			? 'green'
+			? 'yellow'
 			: comparison.trend === 'down'
-				? 'red'
+				? 'green'
 				: 'gray'
 		: 'gray';
 

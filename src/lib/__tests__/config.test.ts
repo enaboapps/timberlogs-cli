@@ -1,4 +1,4 @@
-import {describe, it, expect, beforeEach, afterEach, vi} from 'vitest';
+import {describe, it, expect, beforeEach, afterEach} from 'vitest';
 import {readConfig, writeConfig, deleteConfig, getConfigDir, getConfigPath} from '../config.js';
 import {mkdtempSync, rmSync, existsSync, readFileSync, statSync} from 'node:fs';
 import {join} from 'node:path';

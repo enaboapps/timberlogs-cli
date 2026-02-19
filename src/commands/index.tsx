@@ -22,14 +22,12 @@ export default function Index() {
 			<Text bold>Global Flags:</Text>
 			<Text>  --json             Force JSON output</Text>
 			<Text>  --api-key {'<key>'}    Override API key</Text>
-			<Text>  --api-url {'<url>'}    Override API endpoint</Text>
 			<Text>  --verbose          Show debug info</Text>
 			<Text>  --version, -v      Show version</Text>
 			<Text>  --help, -h         Show help</Text>
 			<Text> </Text>
 			<Text bold>Environment Variables:</Text>
 			<Text>  TIMBER_API_KEY     API key (overrides config file)</Text>
-			<Text>  TIMBER_API_URL     API endpoint (overrides config file)</Text>
 			<Text>  NO_COLOR           Disable color output</Text>
 		</Box>
 	);

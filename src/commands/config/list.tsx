@@ -3,7 +3,6 @@ import {useEffect} from 'react';
 import {z} from 'zod';
 import {readConfig} from '../../lib/config.js';
 import {maskApiKey} from '../../lib/auth.js';
-import {DEFAULT_API_URL} from '../../types/config.js';
 
 export const options = z.object({
 	json: z.boolean().default(false).describe('Output as JSON'),
@@ -18,7 +17,6 @@ export default function ConfigList({options}: Props) {
 
 	const display = {
 		apiKey: config.apiKey ? maskApiKey(config.apiKey) : '(not set)',
-		apiUrl: config.apiUrl ?? DEFAULT_API_URL,
 	};
 
 	useEffect(() => {
@@ -37,10 +35,6 @@ export default function ConfigList({options}: Props) {
 			<Text>
 				<Text bold>API Key:  </Text>
 				<Text>{display.apiKey}</Text>
-			</Text>
-			<Text>
-				<Text bold>API URL:  </Text>
-				<Text>{display.apiUrl}</Text>
 			</Text>
 		</Box>
 	);

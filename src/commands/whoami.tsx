@@ -1,7 +1,7 @@
 import {Text, Box} from 'ink';
 import {useState, useEffect} from 'react';
 import {z} from 'zod';
-import {resolveApiKey, maskApiKey, resolveApiUrl} from '../lib/auth.js';
+import {resolveApiKey, maskApiKey} from '../lib/auth.js';
 import {createApiClient} from '../lib/api.js';
 import {handleError, CliError, ErrorCode} from '../lib/errors.js';
 
@@ -17,7 +17,6 @@ type Props = {
 type Result = {
 	authenticated: boolean;
 	keyPrefix?: string;
-	apiUrl?: string;
 	error?: string;
 };
 
@@ -39,8 +38,7 @@ export default function WhoAmI({options}: Props) {
 			return;
 		}
 
-		const apiUrl = resolveApiUrl({});
-		const client = createApiClient({apiKey: key, baseUrl: apiUrl});
+		const client = createApiClient({apiKey: key});
 
 		try {
 			await client.get('/v1/logs', {limit: 1});
@@ -59,7 +57,6 @@ export default function WhoAmI({options}: Props) {
 		const info = {
 			authenticated: true,
 			keyPrefix: maskApiKey(key),
-			apiUrl,
 		};
 
 		if (options.json) {
@@ -91,10 +88,6 @@ export default function WhoAmI({options}: Props) {
 			<Text>
 				<Text bold>{'API Key:      '}</Text>
 				<Text>{result.keyPrefix}</Text>
-			</Text>
-			<Text>
-				<Text bold>{'API Endpoint: '}</Text>
-				<Text>{result.apiUrl}</Text>
 			</Text>
 		</Box>
 	);

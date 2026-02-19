@@ -1,4 +1,5 @@
 import {CliError, ErrorCode} from './errors.js';
+import {API_URL} from '../types/config.js';
 
 export interface ApiClient {
 	get<T>(path: string, params?: Record<string, string | number | undefined>): Promise<T>;
@@ -7,10 +8,10 @@ export interface ApiClient {
 
 export function createApiClient(options: {
 	apiKey: string;
-	baseUrl: string;
 	verbose?: boolean;
 }): ApiClient {
-	const {apiKey, baseUrl, verbose} = options;
+	const {apiKey, verbose} = options;
+	const baseUrl = API_URL;
 
 	const headers: Record<string, string> = {
 		Authorization: `Bearer ${apiKey}`,

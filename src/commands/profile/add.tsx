@@ -2,26 +2,29 @@ import {Text, Box} from 'ink';
 import TextInput from 'ink-text-input';
 import {useState, useEffect} from 'react';
 import {z} from 'zod';
-import {readConfig, writeConfig} from '../lib/config.js';
-import {maskApiKey} from '../lib/auth.js';
-import {createApiClient} from '../lib/api.js';
-import {handleError} from '../lib/errors.js';
+import {readConfig, writeConfig} from '../../lib/config.js';
+import {maskApiKey} from '../../lib/auth.js';
+import {createApiClient} from '../../lib/api.js';
+import {handleError} from '../../lib/errors.js';
 
 export const options = z.object({
-	apiKey: z.string().optional().describe('API key to store'),
-	profile: z.string().optional().describe('Save under a named profile'),
+	apiKey: z.string().optional().describe('API key for the profile'),
 	json: z.boolean().default(false).describe('Output as JSON'),
 });
 
+export const args = z.tuple([z.string().optional().describe('Profile name (defaults to org name)')]);
+
 type Props = {
 	options: z.infer<typeof options>;
+	args: z.infer<typeof args>;
 };
 
-export default function Login({options}: Props) {
+export default function ProfileAdd({options, args}: Props) {
+	const [nameArg] = args;
 	const [inputValue, setInputValue] = useState('');
 	const [status, setStatus] = useState<'input' | 'validating' | 'success' | 'error'>('input');
 	const [errorMsg, setErrorMsg] = useState('');
-	const [savedProfile, setSavedProfile] = useState<string | undefined>();
+	const [savedProfile, setSavedProfile] = useState('');
 
 	const apiKeyFromFlag = options.apiKey;
 
@@ -50,25 +53,21 @@ export default function Login({options}: Props) {
 			return;
 		}
 
-		const profileName = options.profile ?? orgName;
+		const profileName = nameArg ?? orgName ?? 'default';
+
 		const config = readConfig();
-		config.apiKey = key;
-
-		if (profileName) {
-			if (!config.profiles) {
-				config.profiles = {};
-			}
-
-			config.profiles[profileName] = {apiKey: key};
-			config.activeProfile = profileName;
+		if (!config.profiles) {
+			config.profiles = {};
 		}
 
+		config.profiles[profileName] = {apiKey: key};
+		config.activeProfile = profileName;
 		writeConfig(config);
 
 		setSavedProfile(profileName);
 
 		if (options.json) {
-			console.log(JSON.stringify({authenticated: true, keyPrefix: maskApiKey(key), ...(profileName ? {profile: profileName} : {})}));
+			console.log(JSON.stringify({profile: profileName, active: true, keyPrefix: maskApiKey(key)}));
 			process.exit(0);
 		}
 
@@ -101,16 +100,14 @@ export default function Login({options}: Props) {
 	if (status === 'success') {
 		return (
 			<Box flexDirection="column">
-				<Text color="green">✓ Authenticated successfully</Text>
-				{savedProfile && <Text color="green">✓ Profile &quot;{savedProfile}&quot; set as active</Text>}
-				<Text color="green">✓ API key saved to ~/.config/timberlogs/config.json</Text>
+				<Text color="green">✓ Profile &quot;{savedProfile}&quot; added and set as active</Text>
 			</Box>
 		);
 	}
 
 	return (
 		<Box flexDirection="column">
-			<Text>Paste your API key (from app.timberlogs.dev {'>'} Settings {'>'} API Keys):</Text>
+			<Text>Enter API key{nameArg ? ` for profile "${nameArg}"` : ''}:</Text>
 			<Box>
 				<Text>{'> '}</Text>
 				<TextInput value={inputValue} onChange={setInputValue} onSubmit={handleSubmit} mask="*" />

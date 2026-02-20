@@ -35,7 +35,7 @@ export const options = z.object({
 	limit: z.number().int().min(1).default(20).describe('Max flows to return'),
 	offset: z.number().int().min(0).default(0).describe('Number of flows to skip'),
 	json: z.boolean().default(false).describe('Output as JSON'),
-	'api-key': z.string().optional().describe('Override API key'),
+	apiKey: z.string().optional().describe('Override API key'),
 	verbose: z.boolean().default(false).describe('Show debug info'),
 });
 
@@ -71,7 +71,7 @@ export default function FlowsList({options: flags}: Props) {
 
 	async function fetchFlows() {
 		try {
-			const apiKey = requireApiKey({apiKey: flags['api-key']});
+			const apiKey = requireApiKey({apiKey: flags.apiKey});
 			const client = createApiClient({apiKey, verbose: flags.verbose});
 
 			const from = parseRelativeTime(flags.from);

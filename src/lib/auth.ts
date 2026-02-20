@@ -12,6 +12,11 @@ export function resolveApiKey(flags: {apiKey?: string}): string | null {
 	}
 
 	const config = readConfig();
+
+	if (config.activeProfile && config.profiles?.[config.activeProfile]) {
+		return config.profiles[config.activeProfile].apiKey;
+	}
+
 	if (config.apiKey) {
 		return config.apiKey;
 	}

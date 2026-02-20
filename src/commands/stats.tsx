@@ -17,7 +17,7 @@ export const options = z.object({
 	env: z.string().optional().describe('Filter by environment'),
 	dataset: z.string().optional().describe('Filter by dataset'),
 	json: z.boolean().default(false).describe('Output as JSON'),
-	'api-key': z.string().optional().describe('Override API key'),
+	apiKey: z.string().optional().describe('Override API key'),
 	verbose: z.boolean().default(false).describe('Show debug info'),
 });
 
@@ -48,7 +48,7 @@ export default function Stats({options: flags}: Props) {
 
 	async function fetchStats() {
 		try {
-			const apiKey = requireApiKey({apiKey: flags['api-key']});
+			const apiKey = requireApiKey({apiKey: flags.apiKey});
 			const client = createApiClient({apiKey, verbose: flags.verbose});
 
 			const fromMs = parseRelativeTime(flags.from);

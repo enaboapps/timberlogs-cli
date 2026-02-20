@@ -12,7 +12,7 @@ export const args = z.tuple([z.string().describe('flowId')]);
 
 export const options = z.object({
 	json: z.boolean().default(false).describe('Output as JSON'),
-	'api-key': z.string().optional().describe('Override API key'),
+	apiKey: z.string().optional().describe('Override API key'),
 	verbose: z.boolean().default(false).describe('Show debug info'),
 });
 
@@ -40,7 +40,7 @@ export default function FlowsShow({args: [flowId], options: flags}: Props) {
 
 	async function fetchFlow() {
 		try {
-			const apiKey = requireApiKey({apiKey: flags['api-key']});
+			const apiKey = requireApiKey({apiKey: flags.apiKey});
 			const client = createApiClient({apiKey, verbose: flags.verbose});
 
 			const raw = await client.get('/v1/logs', {

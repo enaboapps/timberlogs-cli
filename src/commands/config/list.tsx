@@ -17,6 +17,7 @@ export default function ConfigList({options}: Props) {
 
 	const display = {
 		apiKey: config.apiKey ? maskApiKey(config.apiKey) : '(not set)',
+		activeProfile: config.activeProfile ?? '(none)',
 	};
 
 	useEffect(() => {
@@ -33,8 +34,12 @@ export default function ConfigList({options}: Props) {
 	return (
 		<Box flexDirection="column">
 			<Text>
-				<Text bold>API Key:  </Text>
+				<Text bold>API Key:         </Text>
 				<Text>{display.apiKey}</Text>
+			</Text>
+			<Text>
+				<Text bold>Active Profile:  </Text>
+				<Text>{display.activeProfile}</Text>
 			</Text>
 		</Box>
 	);

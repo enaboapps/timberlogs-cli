@@ -23,7 +23,7 @@ export const options = z.object({
 	'flow-id': z.string().optional().describe('Filter by flow ID'),
 	dataset: z.string().optional().describe('Filter by dataset'),
 	json: z.boolean().default(false).describe('Output as JSON'),
-	'api-key': z.string().optional().describe('Override API key'),
+	apiKey: z.string().optional().describe('Override API key'),
 	verbose: z.boolean().default(false).describe('Show debug info'),
 });
 
@@ -42,7 +42,7 @@ export default function Logs({options: flags}: Props) {
 
 	async function fetchLogs() {
 		try {
-			const apiKey = requireApiKey({apiKey: flags['api-key']});
+			const apiKey = requireApiKey({apiKey: flags.apiKey});
 			const client = createApiClient({apiKey, verbose: flags.verbose});
 
 			const from = parseRelativeTime(flags.from);

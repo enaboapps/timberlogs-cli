@@ -2,11 +2,12 @@ import {Text, Box} from 'ink';
 import {useState, useEffect} from 'react';
 import {z} from 'zod';
 import {resolveApiKey, maskApiKey} from '../lib/auth.js';
+import {readConfig} from '../lib/config.js';
 import {createApiClient} from '../lib/api.js';
 import {handleError, CliError, ErrorCode} from '../lib/errors.js';
 
 export const options = z.object({
-	'api-key': z.string().optional().describe('Override API key'),
+	apiKey: z.string().optional().describe('Override API key'),
 	json: z.boolean().default(false).describe('Output as JSON'),
 });
 
@@ -17,6 +18,8 @@ type Props = {
 type Result = {
 	authenticated: boolean;
 	keyPrefix?: string;
+	profile?: string;
+	organization?: string;
 	error?: string;
 };
 
@@ -28,7 +31,7 @@ export default function WhoAmI({options}: Props) {
 	}, []);
 
 	async function check() {
-		const key = resolveApiKey({'apiKey': options['api-key']});
+		const key = resolveApiKey({apiKey: options.apiKey});
 		if (!key) {
 			if (options.json) {
 				handleError(new CliError(ErrorCode.AUTH_REQUIRED, 'Not authenticated'), true);
@@ -40,8 +43,10 @@ export default function WhoAmI({options}: Props) {
 
 		const client = createApiClient({apiKey: key});
 
+		let orgName: string | undefined;
 		try {
-			await client.get('/v1/logs', {limit: 1});
+			const whoami = await client.get<{organizationName?: string}>('/v1/whoami');
+			orgName = whoami.organizationName;
 		} catch (error) {
 			if (options.json) {
 				handleError(error, true);
@@ -54,9 +59,12 @@ export default function WhoAmI({options}: Props) {
 			return;
 		}
 
-		const info = {
+		const config = readConfig();
+		const info: Result = {
 			authenticated: true,
 			keyPrefix: maskApiKey(key),
+			...(orgName ? {organization: orgName} : {}),
+			...(config.activeProfile ? {profile: config.activeProfile} : {}),
 		};
 
 		if (options.json) {
@@ -85,6 +93,18 @@ export default function WhoAmI({options}: Props) {
 				<Text bold>{'Status:       '}</Text>
 				<Text color="green">Authenticated</Text>
 			</Text>
+			{result.organization && (
+				<Text>
+					<Text bold>{'Organization: '}</Text>
+					<Text>{result.organization}</Text>
+				</Text>
+			)}
+			{result.profile && (
+				<Text>
+					<Text bold>{'Profile:      '}</Text>
+					<Text>{result.profile}</Text>
+				</Text>
+			)}
 			<Text>
 				<Text bold>{'API Key:      '}</Text>
 				<Text>{result.keyPrefix}</Text>

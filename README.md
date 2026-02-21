@@ -15,9 +15,8 @@ timberlogs logs --level error --from 1h
 ### Authentication
 
 ```bash
-timberlogs login                    # Interactive login with masked input
-timberlogs login --api-key <key>    # Non-interactive login
-timberlogs logout                   # Remove stored API key
+timberlogs login                    # Authenticate via browser (OAuth device flow)
+timberlogs logout                   # Remove stored session
 timberlogs whoami                   # Show current auth status
 ```
 
@@ -76,7 +75,6 @@ timberlogs stats --group-by source      # Group by source
 ### Config
 
 ```bash
-timberlogs config set api-key <key>     # Set API key
 timberlogs config list                   # Show current config
 timberlogs config reset                  # Delete config file
 ```
@@ -86,7 +84,6 @@ timberlogs config reset                  # Delete config file
 | Flag | Description |
 |------|-------------|
 | `--json` | Force JSON output |
-| `--api-key <key>` | Override API key for this command |
 | `--verbose` | Show HTTP request details |
 | `--version`, `-v` | Show version |
 | `--help`, `-h` | Show help |
@@ -110,16 +107,8 @@ timberlogs logs --search "500 error" --json --from 1h
 
 | Variable | Description |
 |----------|-------------|
-| `TIMBER_API_KEY` | API key (overrides config file) |
 | `NO_COLOR` | Disable color output |
 | `TIMBERLOGS_CONFIG_DIR` | Custom config directory (default: `~/.config/timberlogs`) |
-
-## Auth Resolution Order
-
-API key is resolved in this order:
-1. `--api-key` flag
-2. `TIMBER_API_KEY` environment variable
-3. Config file (`~/.config/timberlogs/config.json`)
 
 ## Requirements
 

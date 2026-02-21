@@ -2,7 +2,6 @@ import {Text, Box} from 'ink';
 import {useEffect} from 'react';
 import {z} from 'zod';
 import {readConfig} from '../../lib/config.js';
-import {maskApiKey} from '../../lib/auth.js';
 
 export const options = z.object({
 	json: z.boolean().default(false).describe('Output as JSON'),
@@ -16,8 +15,7 @@ export default function ConfigList({options}: Props) {
 	const config = readConfig();
 
 	const display = {
-		apiKey: config.apiKey ? maskApiKey(config.apiKey) : '(not set)',
-		activeProfile: config.activeProfile ?? '(none)',
+		authenticated: Boolean(config.sessionToken),
 	};
 
 	useEffect(() => {
@@ -34,12 +32,10 @@ export default function ConfigList({options}: Props) {
 	return (
 		<Box flexDirection="column">
 			<Text>
-				<Text bold>API Key:         </Text>
-				<Text>{display.apiKey}</Text>
-			</Text>
-			<Text>
-				<Text bold>Active Profile:  </Text>
-				<Text>{display.activeProfile}</Text>
+				<Text bold>Authenticated:  </Text>
+				<Text color={display.authenticated ? 'green' : 'red'}>
+					{display.authenticated ? 'Yes' : 'No'}
+				</Text>
 			</Text>
 		</Box>
 	);

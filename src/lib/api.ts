@@ -7,14 +7,14 @@ export interface ApiClient {
 }
 
 export function createApiClient(options: {
-	apiKey: string;
+	token: string;
 	verbose?: boolean;
 }): ApiClient {
-	const {apiKey, verbose} = options;
+	const {token, verbose} = options;
 	const baseUrl = API_URL;
 
 	const headers: Record<string, string> = {
-		Authorization: `Bearer ${apiKey}`,
+		Authorization: `Bearer ${token}`,
 		'Content-Type': 'application/json',
 	};
 

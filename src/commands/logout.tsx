@@ -1,4 +1,4 @@
-import {Text, Box} from 'ink';
+import {Text} from 'ink';
 import {useEffect} from 'react';
 import {z} from 'zod';
 import {readConfig, writeConfig} from '../lib/config.js';
@@ -13,17 +13,16 @@ type Props = {
 
 export default function Logout({options}: Props) {
 	const config = readConfig();
-	const hadKey = Boolean(config.apiKey);
-	const hasEnvKey = Boolean(process.env['TIMBER_API_KEY']);
+	const wasAuthenticated = Boolean(config.sessionToken);
 
 	useEffect(() => {
-		if (hadKey) {
-			delete config.apiKey;
+		if (wasAuthenticated) {
+			delete config.sessionToken;
 			writeConfig(config);
 		}
 
 		if (options.json) {
-			console.log(JSON.stringify({loggedOut: true, envKeySet: hasEnvKey}));
+			console.log(JSON.stringify({loggedOut: true}));
 			process.exit(0);
 		}
 	}, []);
@@ -32,16 +31,9 @@ export default function Logout({options}: Props) {
 		return null;
 	}
 
-	if (!hadKey) {
-		return <Text color="yellow">No API key configured</Text>;
+	if (!wasAuthenticated) {
+		return <Text color="yellow">Not logged in</Text>;
 	}
 
-	return (
-		<Box flexDirection="column">
-			<Text color="green">✓ Logged out — API key removed</Text>
-			{hasEnvKey && (
-				<Text color="yellow">Note: TIMBER_API_KEY env var is still set. Run `unset TIMBER_API_KEY` to fully log out.</Text>
-			)}
-		</Box>
-	);
+	return <Text color="green">✓ Logged out</Text>;
 }

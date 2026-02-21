@@ -42,22 +42,22 @@ describe('config', () => {
 		});
 
 		it('reads existing config', () => {
-			writeConfig({apiKey: 'test-key'});
-			expect(readConfig()).toEqual({apiKey: 'test-key'});
+			writeConfig({sessionToken: 'tl_sess_test'});
+			expect(readConfig()).toEqual({sessionToken: 'tl_sess_test'});
 		});
 	});
 
 	describe('writeConfig', () => {
 		it('creates config file', () => {
-			writeConfig({apiKey: 'test'});
+			writeConfig({sessionToken: 'tl_sess_test'});
 			const path = getConfigPath();
 			expect(existsSync(path)).toBe(true);
 			const content = JSON.parse(readFileSync(path, 'utf-8'));
-			expect(content).toEqual({apiKey: 'test'});
+			expect(content).toEqual({sessionToken: 'tl_sess_test'});
 		});
 
 		it('sets secure file permissions', () => {
-			writeConfig({apiKey: 'test'});
+			writeConfig({sessionToken: 'tl_sess_test'});
 			const path = getConfigPath();
 			const stats = statSync(path);
 			expect(stats.mode & 0o777).toBe(0o600);
@@ -66,7 +66,7 @@ describe('config', () => {
 
 	describe('deleteConfig', () => {
 		it('deletes existing config file', () => {
-			writeConfig({apiKey: 'test'});
+			writeConfig({sessionToken: 'tl_sess_test'});
 			const path = getConfigPath();
 			expect(existsSync(path)).toBe(true);
 			deleteConfig();

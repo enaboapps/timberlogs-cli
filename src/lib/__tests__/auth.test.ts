@@ -1,5 +1,5 @@
-import {describe, it, expect, vi, beforeEach, afterEach} from 'vitest';
-import {resolveApiKey, requireApiKey, maskApiKey} from '../auth.js';
+import {describe, it, expect, vi, beforeEach} from 'vitest';
+import {resolveToken, requireToken} from '../auth.js';
 import {CliError} from '../errors.js';
 
 vi.mock('../config.js', () => ({
@@ -10,70 +10,33 @@ import {readConfig} from '../config.js';
 
 const mockedReadConfig = vi.mocked(readConfig);
 
-describe('resolveApiKey', () => {
-	const originalEnv = process.env;
-
+describe('resolveToken', () => {
 	beforeEach(() => {
-		process.env = {...originalEnv};
-		delete process.env['TIMBER_API_KEY'];
 		mockedReadConfig.mockReturnValue({});
 	});
 
-	afterEach(() => {
-		process.env = originalEnv;
+	it('returns session token from config', () => {
+		mockedReadConfig.mockReturnValue({sessionToken: 'tl_sess_abc123'});
+		expect(resolveToken()).toBe('tl_sess_abc123');
 	});
 
-	it('returns flag value first', () => {
-		process.env['TIMBER_API_KEY'] = 'env-key';
-		mockedReadConfig.mockReturnValue({apiKey: 'config-key'});
-		expect(resolveApiKey({apiKey: 'flag-key'})).toBe('flag-key');
-	});
-
-	it('falls back to env var', () => {
-		process.env['TIMBER_API_KEY'] = 'env-key';
-		mockedReadConfig.mockReturnValue({apiKey: 'config-key'});
-		expect(resolveApiKey({})).toBe('env-key');
-	});
-
-	it('falls back to config file', () => {
-		mockedReadConfig.mockReturnValue({apiKey: 'config-key'});
-		expect(resolveApiKey({})).toBe('config-key');
-	});
-
-	it('returns null when no key found', () => {
-		expect(resolveApiKey({})).toBeNull();
+	it('returns null when no token found', () => {
+		expect(resolveToken()).toBeNull();
 	});
 });
 
-describe('requireApiKey', () => {
+describe('requireToken', () => {
 	beforeEach(() => {
-		const originalEnv = process.env;
-		process.env = {...originalEnv};
-		delete process.env['TIMBER_API_KEY'];
 		mockedReadConfig.mockReturnValue({});
 	});
 
-	it('returns key when available', () => {
-		expect(requireApiKey({apiKey: 'test-key'})).toBe('test-key');
+	it('returns token when available', () => {
+		mockedReadConfig.mockReturnValue({sessionToken: 'tl_sess_abc123'});
+		expect(requireToken()).toBe('tl_sess_abc123');
 	});
 
-	it('throws CliError when no key', () => {
-		expect(() => requireApiKey({})).toThrow(CliError);
-		expect(() => requireApiKey({})).toThrow('No API key found');
-	});
-});
-
-describe('maskApiKey', () => {
-	it('masks normal length keys', () => {
-		expect(maskApiKey('tb_live_abcdefghijklmnop1234')).toBe('tb_live_****...1234');
-	});
-
-	it('masks keys of exactly 16 chars', () => {
-		expect(maskApiKey('1234567890123456')).toBe('12345678****...3456');
-	});
-
-	it('returns **** for short keys', () => {
-		expect(maskApiKey('short')).toBe('****');
-		expect(maskApiKey('')).toBe('****');
+	it('throws CliError when no token', () => {
+		expect(() => requireToken()).toThrow(CliError);
+		expect(() => requireToken()).toThrow('Not authenticated');
 	});
 });

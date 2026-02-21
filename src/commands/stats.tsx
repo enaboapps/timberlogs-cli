@@ -1,7 +1,7 @@
 import {Text} from 'ink';
 import {useState, useEffect} from 'react';
 import {z} from 'zod';
-import {requireApiKey} from '../lib/auth.js';
+import {requireToken} from '../lib/auth.js';
 import {createApiClient} from '../lib/api.js';
 import {parseRelativeTime} from '../lib/time.js';
 import {handleError} from '../lib/errors.js';
@@ -17,7 +17,6 @@ export const options = z.object({
 	env: z.string().optional().describe('Filter by environment'),
 	dataset: z.string().optional().describe('Filter by dataset'),
 	json: z.boolean().default(false).describe('Output as JSON'),
-	apiKey: z.string().optional().describe('Override API key'),
 	verbose: z.boolean().default(false).describe('Show debug info'),
 });
 
@@ -48,8 +47,8 @@ export default function Stats({options: flags}: Props) {
 
 	async function fetchStats() {
 		try {
-			const apiKey = requireApiKey({apiKey: flags.apiKey});
-			const client = createApiClient({apiKey, verbose: flags.verbose});
+			const token = requireToken();
+			const client = createApiClient({token, verbose: flags.verbose});
 
 			const fromMs = parseRelativeTime(flags.from);
 			const toMs = flags.to ? parseRelativeTime(flags.to) : Date.now();

@@ -1,7 +1,7 @@
 import {Text} from 'ink';
 import {useState, useEffect} from 'react';
 import {z} from 'zod';
-import {requireApiKey} from '../lib/auth.js';
+import {requireToken} from '../lib/auth.js';
 import {createApiClient} from '../lib/api.js';
 import {parseRelativeTime} from '../lib/time.js';
 import {handleError} from '../lib/errors.js';
@@ -25,7 +25,6 @@ export const options = z.object({
 	dataset: z.string().optional().describe('Filter by dataset'),
 	format: z.enum(['json', 'jsonl', 'csv', 'text', 'syslog', 'obl']).optional().describe('Output format (json|jsonl|csv|text|syslog|obl)'),
 	json: z.boolean().default(false).describe('Output as JSON'),
-	apiKey: z.string().optional().describe('Override API key'),
 	verbose: z.boolean().default(false).describe('Show debug info'),
 });
 
@@ -45,8 +44,8 @@ export default function Logs({options: flags}: Props) {
 
 	async function fetchLogs() {
 		try {
-			const apiKey = requireApiKey({apiKey: flags.apiKey});
-			const client = createApiClient({apiKey, verbose: flags.verbose});
+			const token = requireToken();
+			const client = createApiClient({token, verbose: flags.verbose});
 
 			const from = parseRelativeTime(flags.from);
 			const to = flags.to ? parseRelativeTime(flags.to) : undefined;

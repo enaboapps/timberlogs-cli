@@ -6,6 +6,7 @@ import {createApiClient} from '../lib/api.js';
 import {parseRelativeTime} from '../lib/time.js';
 import {handleError} from '../lib/errors.js';
 import {isJsonMode, jsonOutput} from '../lib/output.js';
+import {formatLogs, type OutputFormat} from '../lib/formatters.js';
 import {LogsResponseSchema, type LogsResponse} from '../types/log.js';
 import LogTable from '../components/LogTable.js';
 
@@ -22,6 +23,7 @@ export const options = z.object({
 	'session-id': z.string().optional().describe('Filter by session ID'),
 	'flow-id': z.string().optional().describe('Filter by flow ID'),
 	dataset: z.string().optional().describe('Filter by dataset'),
+	format: z.enum(['json', 'jsonl', 'csv', 'text', 'syslog', 'obl']).optional().describe('Output format (json|jsonl|csv|text|syslog|obl)'),
 	json: z.boolean().default(false).describe('Output as JSON'),
 	apiKey: z.string().optional().describe('Override API key'),
 	verbose: z.boolean().default(false).describe('Show debug info'),
@@ -34,7 +36,8 @@ type Props = {
 export default function Logs({options: flags}: Props) {
 	const [data, setData] = useState<LogsResponse | null>(null);
 	const [error, setError] = useState<string | null>(null);
-	const json = isJsonMode(flags);
+	const fmt = flags.format as OutputFormat | undefined;
+	const json = !fmt && isJsonMode(flags);
 
 	useEffect(() => {
 		void fetchLogs();
@@ -75,13 +78,18 @@ export default function Logs({options: flags}: Props) {
 
 			const response = LogsResponseSchema.parse(raw);
 
+			if (fmt) {
+				console.log(formatLogs(response.logs, fmt));
+				process.exit(0);
+			}
+
 			if (json) {
 				jsonOutput(response);
 			}
 
 			setData(response);
 		} catch (err) {
-			if (json) {
+			if (fmt || json) {
 				handleError(err, true);
 			}
 
@@ -89,7 +97,7 @@ export default function Logs({options: flags}: Props) {
 		}
 	}
 
-	if (json) {
+	if (json || fmt) {
 		return null;
 	}
 

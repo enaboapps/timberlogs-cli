@@ -1,0 +1,17 @@
+{
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "CLI",
+        "groups": [
+          {
+            "group": "CLI",
+            "pages": [
+              "cli/overview"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 import ReplView from '../components/ReplView.js';
 
-export default function Index() {
+export default function Repl() {
 	return <ReplView />;
 }

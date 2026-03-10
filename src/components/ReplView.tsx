@@ -21,6 +21,8 @@ import FlowShowView from './commandViews/FlowShowView.js';
 import LoginView from './commandViews/LoginView.js';
 import type {ReplEntry} from './ReplOutput.js';
 
+const COMMANDS_HINT = 'logs  stats  flows  flows show  whoami  login  logout  config list  help  exit';
+
 function ReplHeader({token, orgName}: {token: string | null; orgName: string | null}) {
 	const cols = process.stdout.columns || 80;
 	return (
@@ -32,17 +34,12 @@ function ReplHeader({token, orgName}: {token: string | null; orgName: string | n
 					<Text dimColor>v{CLI_VERSION}</Text>
 				</Box>
 				{token ? (
-					<Text>
-						<Text color="green">● </Text>
-						<Text>{orgName ?? 'Authenticated'}</Text>
-					</Text>
+					<Text><Text color="green">● </Text><Text>{orgName ?? 'Authenticated'}</Text></Text>
 				) : (
-					<Text>
-						<Text color="red">● </Text>
-						<Text dimColor>Not logged in  ·  run login to authenticate</Text>
-					</Text>
+					<Text><Text color="red">● </Text><Text dimColor>Not logged in</Text></Text>
 				)}
 			</Box>
+			<Text dimColor>{COMMANDS_HINT}</Text>
 			<Text dimColor>{'─'.repeat(Math.min(cols, 60))}</Text>
 		</Box>
 	);

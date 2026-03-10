@@ -1,10 +1,11 @@
 import {Box, Text} from 'ink';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import type {ReactNode} from 'react';
 import {loadHistory, saveHistory} from '../lib/history.js';
 import {parseReplInput} from '../lib/replParser.js';
 import {parseFlags} from '../lib/flagParser.js';
 import {resolveToken} from '../lib/auth.js';
+import {createApiClient} from '../lib/api.js';
 import {readConfig, writeConfig, deleteConfig} from '../lib/config.js';
 import {options as logsOptions} from '../commands/logs.js';
 import {options as statsOptions} from '../commands/stats.js';
@@ -19,6 +20,33 @@ import LogsView from './commandViews/LogsView.js';
 import FlowShowView from './commandViews/FlowShowView.js';
 import LoginView from './commandViews/LoginView.js';
 import type {ReplEntry} from './ReplOutput.js';
+
+function ReplHeader({token, orgName}: {token: string | null; orgName: string | null}) {
+	const cols = process.stdout.columns || 80;
+	return (
+		<Box flexDirection="column">
+			<Box gap={2}>
+				<Box gap={1}>
+					<Text bold color="green">▲</Text>
+					<Text bold>Timberlogs</Text>
+					<Text dimColor>v{CLI_VERSION}</Text>
+				</Box>
+				{token ? (
+					<Text>
+						<Text color="green">● </Text>
+						<Text>{orgName ?? 'Authenticated'}</Text>
+					</Text>
+				) : (
+					<Text>
+						<Text color="red">● </Text>
+						<Text dimColor>Not logged in  ·  run login to authenticate</Text>
+					</Text>
+				)}
+			</Box>
+			<Text dimColor>{'─'.repeat(Math.min(cols, 60))}</Text>
+		</Box>
+	);
+}
 
 type Phase =
 	| {tag: 'idle'}
@@ -48,24 +76,29 @@ export default function ReplView() {
 	const [phase, setPhase] = useState<Phase>({tag: 'idle'});
 	const [history, setHistory] = useState<string[]>([]);
 	const [token, setToken] = useState<string | null>(null);
+	const [orgName, setOrgName] = useState<string | null>(null);
+
+	const fetchOrgName = useCallback(async (t: string) => {
+		try {
+			const client = createApiClient({token: t});
+			const whoami = await client.get<{organizationName?: string}>('/v1/whoami');
+			if (whoami.organizationName) setOrgName(whoami.organizationName);
+		} catch {
+			// silently fail — header shows "Authenticated" fallback
+		}
+	}, []);
 
 	useEffect(() => {
 		setHistory(loadHistory());
 		const t = resolveToken();
 		setToken(t);
-		setEntries([{
-			kind: 'output',
-			content: (
-				<Box flexDirection="column">
-					<Text bold>Timberlogs v{CLI_VERSION}</Text>
-					<Text dimColor>
-						{t ? '✓ Authenticated' : '✗ Not authenticated — run `login` to get started'}
-						{'  ·  Type `help` for commands'}
-					</Text>
-				</Box>
-			),
-		}]);
+		if (t) void fetchOrgName(t);
 	}, []);
+
+	useEffect(() => {
+		if (!token) { setOrgName(null); return; }
+		void fetchOrgName(token);
+	}, [token]);
 
 	function addEntry(entry: ReplEntry) {
 		setEntries(prev => [...prev, entry].slice(-MAX_ENTRIES));
@@ -248,6 +281,7 @@ export default function ReplView() {
 
 	return (
 		<Box flexDirection="column">
+			<ReplHeader token={token} orgName={orgName} />
 			{visibleEntries.map((entry, i) => (
 				<ReplOutput key={i} entry={entry} />
 			))}

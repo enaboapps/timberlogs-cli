@@ -11,6 +11,29 @@ npm install -g timberlogs-cli
 
 **Requirements:** Node.js 20 or later.
 
+## REPL
+
+Running `timberlogs` with no arguments launches an interactive REPL session — a persistent prompt where you can run any command without reinvoking the binary.
+
+```bash
+timberlogs
+```
+
+```
+▲  Timberlogs  v1.0.0    ●  Acme Corp
+logs  stats  flows  flows show  whoami  login  logout  config list  help  exit
+────────────────────────────────────────────────────────────
+❯ logs --level error --from 24h
+❯ stats --group-by source
+❯ flows show checkout-abc-123
+```
+
+Commands work exactly like the CLI — same flags, same output. Commands that produce a table (`logs`, `stats`, `flows show`) take over the full screen with keyboard navigation; press `q` to return to the prompt.
+
+**Builtins:** `help`, `clear`, `exit`
+
+**History:** Use `↑` / `↓` to navigate previous commands. History is saved to `~/.config/timberlogs/history.json`.
+
 ## Authentication
 
 The CLI uses OAuth device flow — no API keys needed.
@@ -106,8 +129,11 @@ timberlogs logs --level error | jq '.logs[].message'
 ## Config
 
 ```bash
-timberlogs config list     # Show current config
-timberlogs config reset    # Delete config file
+timberlogs config list           # Show current config
+timberlogs config reset          # Delete config file (prompts for confirmation)
+timberlogs config reset --force  # Delete without confirmation
 ```
+
+When running inside the REPL, `config reset` requires `--force` — interactive confirmation prompts are not supported in the REPL session.
 
 Session data is stored at `~/.config/timberlogs/config.json` with `600` permissions. Override the directory with the `TIMBERLOGS_CONFIG_DIR` environment variable.

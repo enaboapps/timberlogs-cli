@@ -25,6 +25,7 @@ type Props = {
 		warn: number;
 		error: number;
 	}>;
+	onBack?: () => void;
 };
 
 function formatNumber(n: number): string {
@@ -37,10 +38,11 @@ function renderBar(value: number, total: number, maxWidth: number): string {
 	return '█'.repeat(filled) + '░'.repeat(maxWidth - filled);
 }
 
-export default function StatsView({totals, period, comparison, groupBySource}: Props) {
+export default function StatsView({totals, period, comparison, groupBySource, onBack}: Props) {
 	useInput((input) => {
 		if (input === 'q') {
-			process.exit(0);
+			if (onBack) onBack();
+			else process.exit(0);
 		}
 	});
 

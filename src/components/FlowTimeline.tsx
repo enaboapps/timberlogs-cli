@@ -8,6 +8,7 @@ type Props = {
 	stepCount: number;
 	durationMs: number;
 	hasErrors: boolean;
+	onBack?: () => void;
 };
 
 function formatDuration(ms: number): string {
@@ -26,10 +27,11 @@ function formatDataInline(data: Record<string, unknown> | undefined, maxWidth: n
 	return result.length > maxWidth ? result.slice(0, maxWidth - 1) + '…' : result;
 }
 
-export default function FlowTimeline({flowId, logs, stepCount, durationMs, hasErrors}: Props) {
+export default function FlowTimeline({flowId, logs, stepCount, durationMs, hasErrors, onBack}: Props) {
 	useInput((input) => {
 		if (input === 'q') {
-			process.exit(0);
+			if (onBack) onBack();
+			else process.exit(0);
 		}
 	});
 

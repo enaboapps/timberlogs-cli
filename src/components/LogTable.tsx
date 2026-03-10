@@ -8,9 +8,10 @@ type Props = {
 	logs: LogEntry[];
 	pagination: LogsResponse['pagination'];
 	filterSummary?: string;
+	onBack?: () => void;
 };
 
-export default function LogTable({logs, pagination, filterSummary}: Props) {
+export default function LogTable({logs, pagination, filterSummary, onBack}: Props) {
 	const [cursor, setCursor] = useState(0);
 	const [expanded, setExpanded] = useState<number | null>(null);
 
@@ -33,7 +34,8 @@ export default function LogTable({logs, pagination, filterSummary}: Props) {
 		} else if (key.return) {
 			setExpanded(cursor);
 		} else if (input === 'q') {
-			process.exit(0);
+			if (onBack) onBack();
+			else process.exit(0);
 		}
 	});
 

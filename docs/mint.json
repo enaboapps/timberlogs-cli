@@ -1,0 +1,10 @@
+{
+  "navigation": [
+    {
+      "group": "CLI",
+      "pages": [
+        "cli/overview"
+      ]
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 import {Text, Box} from 'ink';
 import Spinner from 'ink-spinner';
 import {useState, useEffect} from 'react';
-import {exec} from 'node:child_process';
+import {spawn} from 'node:child_process';
 import {z} from 'zod';
 import {readConfig, writeConfig} from '../lib/config.js';
 import {handleError} from '../lib/errors.js';
@@ -34,16 +34,13 @@ type TokenErrorResponse = {
 const POLL_INTERVAL_MS = 5000;
 
 function openBrowser(url: string): void {
-	const command =
-		process.platform === 'darwin'
-			? `open "${url}"`
-			: process.platform === 'win32'
-				? `start "${url}"`
-				: `xdg-open "${url}"`;
-
-	exec(command, () => {
-		// Ignore errors — user can open URL manually
-	});
+	if (process.platform === 'win32') {
+		spawn('cmd', ['/c', 'start', '', url], {windowsHide: true, detached: true, stdio: 'ignore'});
+	} else if (process.platform === 'darwin') {
+		spawn('open', [url], {detached: true, stdio: 'ignore'});
+	} else {
+		spawn('xdg-open', [url], {detached: true, stdio: 'ignore'});
+	}
 }
 
 export default function Login({options}: Props) {

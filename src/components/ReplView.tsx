@@ -51,7 +51,20 @@ export default function ReplView() {
 
 	useEffect(() => {
 		setHistory(loadHistory());
-		setToken(resolveToken());
+		const t = resolveToken();
+		setToken(t);
+		setEntries([{
+			kind: 'output',
+			content: (
+				<Box flexDirection="column">
+					<Text bold>Timberlogs v{CLI_VERSION}</Text>
+					<Text dimColor>
+						{t ? '✓ Authenticated' : '✗ Not authenticated — run `login` to get started'}
+						{'  ·  Type `help` for commands'}
+					</Text>
+				</Box>
+			),
+		}]);
 	}, []);
 
 	function addEntry(entry: ReplEntry) {

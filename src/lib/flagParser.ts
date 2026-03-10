@@ -63,6 +63,11 @@ export function parseFlags(
 		}
 	}
 
+	const unknownKeys = Object.keys(raw).filter(k => !shape[k]);
+	if (unknownKeys.length > 0) {
+		return {flags: schema.parse({}) as Record<string, unknown>, positional, error: `Unknown flag(s): ${unknownKeys.map(k => `--${k}`).join(', ')}`};
+	}
+
 	try {
 		return {flags: schema.parse(raw) as Record<string, unknown>, positional, error: null};
 	} catch (err) {

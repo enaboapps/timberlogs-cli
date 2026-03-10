@@ -87,9 +87,7 @@ export default function ReplView() {
 
 	useEffect(() => {
 		setHistory(loadHistory());
-		const t = resolveToken();
-		setToken(t);
-		if (t) void fetchOrgName(t);
+		setToken(resolveToken());
 	}, []);
 
 	useEffect(() => {

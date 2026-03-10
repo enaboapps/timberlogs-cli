@@ -25,7 +25,7 @@ export default function FlowShowView({flowId, token, onBack, onDone, onError}: P
 			const logs = response.logs;
 
 			if (logs.length === 0) {
-				onDone(null, false);
+				onError(`No logs found for flow ${flowId}`);
 				return;
 			}
 

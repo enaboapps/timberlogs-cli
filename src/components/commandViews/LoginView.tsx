@@ -14,7 +14,7 @@ type DeviceResponse = {
 
 type TokenResponse = {
 	access_token: string;
-	organization_name?: string;
+	workspace_name?: string;
 };
 
 type TokenErrorResponse = {
@@ -99,8 +99,8 @@ export default function LoginView({onDone, onError}: Props) {
 				onDone(
 					<Box flexDirection="column">
 						<Text color="green">✓ Authenticated successfully</Text>
-						{token.organization_name ? (
-							<Text color="green">✓ Organization: {token.organization_name}</Text>
+						{token.workspace_name ? (
+							<Text color="green">✓ Workspace: {token.workspace_name}</Text>
 						) : null}
 					</Box>,
 					false,

@@ -15,7 +15,7 @@ type Props = {
 
 type Result = {
 	authenticated: boolean;
-	organization?: string;
+	workspace?: string;
 	error?: string;
 };
 
@@ -39,10 +39,10 @@ export default function WhoAmI({options}: Props) {
 
 		const client = createApiClient({token});
 
-		let orgName: string | undefined;
+		let workspaceName: string | undefined;
 		try {
-			const whoami = await client.get<{organizationName?: string}>('/v1/whoami');
-			orgName = whoami.organizationName;
+			const whoami = await client.get<{workspaceName?: string}>('/v1/whoami');
+			workspaceName = whoami.workspaceName;
 		} catch (error) {
 			if (options.json) {
 				handleError(error, true);
@@ -57,7 +57,7 @@ export default function WhoAmI({options}: Props) {
 
 		const info: Result = {
 			authenticated: true,
-			...(orgName ? {organization: orgName} : {}),
+			...(workspaceName ? {workspace: workspaceName} : {}),
 		};
 
 		if (options.json) {
@@ -86,10 +86,10 @@ export default function WhoAmI({options}: Props) {
 				<Text bold>{'Status:       '}</Text>
 				<Text color="green">Authenticated</Text>
 			</Text>
-			{result.organization && (
+			{result.workspace && (
 				<Text>
-					<Text bold>{'Organization: '}</Text>
-					<Text>{result.organization}</Text>
+					<Text bold>{'Workspace:    '}</Text>
+					<Text>{result.workspace}</Text>
 				</Text>
 			)}
 		</Box>

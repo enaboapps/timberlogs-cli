@@ -1,6 +1,6 @@
 {
   "name": "timberlogs-cli",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Official Timberlogs CLI — query logs, inspect flows, view stats from your terminal",
   "keywords": [
     "timberlogs",

@@ -23,7 +23,7 @@ import type {ReplEntry} from './ReplOutput.js';
 
 const COMMANDS_HINT = 'logs  stats  flows  flows show  whoami  login  logout  config list  help  exit';
 
-function ReplHeader({token, orgName}: {token: string | null; orgName: string | null}) {
+function ReplHeader({token, workspaceName}: {token: string | null; workspaceName: string | null}) {
 	const cols = process.stdout.columns || 80;
 	return (
 		<Box flexDirection="column">
@@ -34,7 +34,7 @@ function ReplHeader({token, orgName}: {token: string | null; orgName: string | n
 					<Text dimColor>v{CLI_VERSION}</Text>
 				</Box>
 				{token ? (
-					<Text><Text color="green">● </Text><Text>{orgName ?? 'Authenticated'}</Text></Text>
+					<Text><Text color="green">● </Text><Text>{workspaceName ?? 'Authenticated'}</Text></Text>
 				) : (
 					<Text><Text color="red">● </Text><Text dimColor>Not logged in</Text></Text>
 				)}
@@ -73,13 +73,13 @@ export default function ReplView() {
 	const [phase, setPhase] = useState<Phase>({tag: 'idle'});
 	const [history, setHistory] = useState<string[]>([]);
 	const [token, setToken] = useState<string | null>(null);
-	const [orgName, setOrgName] = useState<string | null>(null);
+	const [workspaceName, setWorkspaceName] = useState<string | null>(null);
 
-	const fetchOrgName = useCallback(async (t: string) => {
+	const fetchWorkspaceName = useCallback(async (t: string) => {
 		try {
 			const client = createApiClient({token: t});
-			const whoami = await client.get<{organizationName?: string}>('/v1/whoami');
-			if (whoami.organizationName) setOrgName(whoami.organizationName);
+			const whoami = await client.get<{workspaceName?: string}>('/v1/whoami');
+			if (whoami.workspaceName) setWorkspaceName(whoami.workspaceName);
 		} catch {
 			// silently fail — header shows "Authenticated" fallback
 		}
@@ -91,8 +91,8 @@ export default function ReplView() {
 	}, []);
 
 	useEffect(() => {
-		if (!token) { setOrgName(null); return; }
-		void fetchOrgName(token);
+		if (!token) { setWorkspaceName(null); return; }
+		void fetchWorkspaceName(token);
 	}, [token]);
 
 	function addEntry(entry: ReplEntry) {
@@ -276,7 +276,7 @@ export default function ReplView() {
 
 	return (
 		<Box flexDirection="column">
-			<ReplHeader token={token} orgName={orgName} />
+			<ReplHeader token={token} workspaceName={workspaceName} />
 			{visibleEntries.map((entry, i) => (
 				<ReplOutput key={i} entry={entry} />
 			))}

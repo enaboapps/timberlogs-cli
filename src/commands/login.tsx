@@ -23,7 +23,7 @@ type DeviceResponse = {
 
 type TokenResponse = {
 	access_token: string;
-	organization_name?: string;
+	workspace_name?: string;
 };
 
 type TokenErrorResponse = {
@@ -47,7 +47,7 @@ export default function Login({options}: Props) {
 	const [status, setStatus] = useState<'init' | 'polling' | 'success' | 'error'>('init');
 	const [errorMsg, setErrorMsg] = useState('');
 	const [userCode, setUserCode] = useState('');
-	const [orgName, setOrgName] = useState<string | undefined>();
+	const [workspaceName, setWorkspaceName] = useState<string | undefined>();
 
 	useEffect(() => {
 		void startDeviceFlow();
@@ -111,12 +111,12 @@ export default function Login({options}: Props) {
 				config.sessionToken = token.access_token;
 				writeConfig(config);
 
-				setOrgName(token.organization_name);
+				setWorkspaceName(token.workspace_name);
 
 				if (options.json) {
 					console.log(JSON.stringify({
 						authenticated: true,
-						...(token.organization_name ? {organization: token.organization_name} : {}),
+						...(token.workspace_name ? {workspace: token.workspace_name} : {}),
 					}));
 					process.exit(0);
 				}
@@ -180,7 +180,7 @@ export default function Login({options}: Props) {
 		return (
 			<Box flexDirection="column">
 				<Text color="green">✓ Authenticated successfully</Text>
-				{orgName && <Text color="green">✓ Organization: {orgName}</Text>}
+				{workspaceName && <Text color="green">✓ Workspace: {workspaceName}</Text>}
 			</Box>
 		);
 	}

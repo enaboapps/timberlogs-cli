@@ -17,12 +17,12 @@ export default function WhoamiView({token, onDone, onError}: Props) {
 	async function run() {
 		try {
 			const client = createApiClient({token});
-			const whoami = await client.get<{organizationName?: string}>('/v1/whoami');
+			const whoami = await client.get<{workspaceName?: string}>('/v1/whoami');
 			onDone(
 				<Box flexDirection="column">
 					<Text><Text bold>{'Status:       '}</Text><Text color="green">Authenticated</Text></Text>
-					{whoami.organizationName ? (
-						<Text><Text bold>{'Organization: '}</Text><Text>{whoami.organizationName}</Text></Text>
+					{whoami.workspaceName ? (
+						<Text><Text bold>{'Workspace:    '}</Text><Text>{whoami.workspaceName}</Text></Text>
 					) : null}
 				</Box>,
 				false,
